@@ -2,14 +2,27 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <form wicket:id="form">
-    <wicket:container wicket:id="group">
-        <label wicket:id="choice">
-            <input wicket:id="radio" type="radio" name="ticker"/>
-            <wicket:container wicket:id="label"/>
-        </label>
-    </wicket:container>
+
+    <div> Radio:
+        <wicket:container wicket:id="radioGroup">
+            <label wicket:id="radioChoice">
+                <input wicket:id="radio" type="radio"/>
+                <wicket:container wicket:id="radioLabel"/>
+            </label>
+        </wicket:container>
+    </div>
+
+    <div wicket:id="ajaxRadioDiv"> Ajax radio:
+        <wicket:container wicket:id="ajaxRadioGroup">
+            <label wicket:id="ajaxRadioChoice">
+                <input wicket:id="ajaxRadio" type="radio"/>
+                <wicket:container wicket:id="ajaxRadioLabel"/>
+            </label>
+        </wicket:container>
+    </div>
 
     <div>
+        Optional field:
         <input wicket:id="optional" type="text"/>
     </div>
 
