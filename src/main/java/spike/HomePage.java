@@ -3,6 +3,7 @@ package spike;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
@@ -73,7 +74,7 @@ public class HomePage extends WebPage {
             @Override
             protected void populateItem(ListItem<String> item) {
                 final String string = item.getModelObject();
-                CheckBox checkBox = new CheckBox("check", new IModel<Boolean>() {
+                IModel<Boolean> checkboxModel = new IModel<Boolean>() {
                     @Override
                     public Boolean getObject() {
                         List<String> alternatives = getState().getAlternatives();
@@ -87,13 +88,18 @@ public class HomePage extends WebPage {
                         } else {
                             getState().getAlternatives().remove(string);
                         }
-
                     }
 
                     @Override
                     public void detach() {
                     }
-                });
+                };
+                CheckBox checkBox = new AjaxCheckBox("check", new Model<Boolean>()) {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        System.out.println("HomePage.onUpdate");
+                    }
+                };
                 checkBox.setOutputMarkupId(true);
                 item.add(checkBox);
                 item.add(new Label("name", string));
