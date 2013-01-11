@@ -19,16 +19,10 @@ import java.util.List;
 
 public class HomePage extends WebPage {
 
-    private static final List<String> RADIO_TYPES = Arrays.asList(new String[] {
-            "WAT!",
-            "Capiche"
-    });
-
     private static final List<String> AJAX_RADIO_TYPES = Arrays.asList(new String[] {
             "ON",
             "OFF"
     });
-    private TextField<String> optionalTextField;
 
     public HomePage() {
         super(Model.of(new State("OFF", "hidden?")));
@@ -56,36 +50,9 @@ public class HomePage extends WebPage {
             }
         };
 
-        form.add(createRadioGroup());
         form.add(createAjaxRadioGroup());
-        optionalTextField = createOptionalTextField();
-        form.add(optionalTextField);
 
         return form;
-    }
-
-    private TextField<String> createOptionalTextField() {
-        TextField<String> optional = new TextField<String>("optional", new PropertyModel<String>(getState(), "optional")) {
-            @Override
-            public boolean isVisible() {
-                return "ON".equals(HomePage.this.getSelected());
-            }
-        };
-        optional.setOutputMarkupId(true);
-        optional.setOutputMarkupPlaceholderTag(true);
-        return optional;
-    }
-
-    private RadioGroup<String> createRadioGroup() {
-        RadioGroup<String> radioGroup = new RadioGroup<String>("radioGroup", new PropertyModel<String>(getState(), "radioSelect"));
-        ListView<String> listView = new ListView<String>("radioChoice", RADIO_TYPES) {
-            protected void populateItem(final ListItem<String> it) {
-                it.add(new Radio("radio", it.getModel()));
-                it.add(new Label("radioLabel", it.getModelObject()));
-            }
-        };
-        radioGroup.add(listView);
-        return radioGroup;
     }
 
     private WebMarkupContainer createAjaxRadioGroup() {
@@ -104,7 +71,6 @@ public class HomePage extends WebPage {
                         getState().setAjaxRadioSelect(it.getModelObject());
 
                         target.add(ajaxRadioDiv);
-                        target.add(optionalTextField);
                     }
                 });
             }

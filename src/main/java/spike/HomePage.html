@@ -3,15 +3,6 @@
 <body>
 <form wicket:id="form">
 
-    <div> Radio:
-        <wicket:container wicket:id="radioGroup">
-            <label wicket:id="radioChoice">
-                <input wicket:id="radio" type="radio"/>
-                <wicket:container wicket:id="radioLabel"/>
-            </label>
-        </wicket:container>
-    </div>
-
     <div wicket:id="ajaxRadioDiv"> Ajax radio:
         <wicket:container wicket:id="ajaxRadioGroup">
             <label wicket:id="ajaxRadioChoice">
@@ -22,8 +13,10 @@
     </div>
 
     <div>
-        Optional field:
-        <input wicket:id="optional" type="text"/>
+        Optional checkboxes:<br/>
+        <input type="checkbox" name="vehicle" value="Bike">Alt 1<br>
+        <input type="checkbox" name="vehicle" value="Bike">Alt 2<br>
+        <input type="checkbox" name="vehicle" value="Bike">Alt 3<br>
     </div>
 
     <input type="submit"/>
