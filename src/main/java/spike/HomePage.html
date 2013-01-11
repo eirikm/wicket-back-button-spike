@@ -12,11 +12,13 @@
         </wicket:container>
     </div>
 
-    <div>
+    <div wicket:id="checkboxContainer">
         Optional checkboxes:<br/>
-        <input type="checkbox" name="vehicle" value="Bike">Alt 1<br>
-        <input type="checkbox" name="vehicle" value="Bike">Alt 2<br>
-        <input type="checkbox" name="vehicle" value="Bike">Alt 3<br>
+        <span wicket:id="checkboxListView">
+          <input wicket:id="check" type="checkbox"/>
+          <span wicket:id="name">test</span>
+          <br/>
+        </span>
     </div>
 
     <input type="submit"/>

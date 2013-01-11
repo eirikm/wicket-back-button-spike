@@ -1,12 +1,13 @@
 package spike;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
@@ -19,14 +20,14 @@ import java.util.List;
 
 public class HomePage extends WebPage {
 
-    private static final List<String> AJAX_RADIO_TYPES = Arrays.asList(new String[] {
-            "ON",
-            "OFF"
-    });
+    private static final List<String> AJAX_RADIO_TYPES = Arrays.asList("ON", "OFF");
+    private static final List<String> CHECKBOXES = Arrays.asList("Alt 1", "Alt 2", "Alt 3");
+    private Component checkboxes;
 
     public HomePage() {
-        super(Model.of(new State("OFF", "hidden?")));
+        super(Model.of(new State("OFF")));
         getState().setLastPage(this.getClass());
+
         add(createForm());
     }
 
@@ -51,8 +52,31 @@ public class HomePage extends WebPage {
         };
 
         form.add(createAjaxRadioGroup());
+        checkboxes = createCheckboxes();
+        form.add(checkboxes);
 
         return form;
+    }
+
+    private Component createCheckboxes() {
+        WebMarkupContainer container = new WebMarkupContainer("checkboxContainer") {
+            @Override
+            public boolean isVisible() {
+                return "ON".equals(getState().getAjaxRadioSelect());
+            }
+        };
+        ListView<String> listView = new ListView<String>("checkboxListView", CHECKBOXES) {
+            @Override
+            protected void populateItem(ListItem<String> item) {
+                String string = item.getModelObject();
+                item.add(new CheckBox("check", Model.of(true)));
+                item.add(new Label("name", string));
+            }
+        };
+        container.add(listView);
+        container.setOutputMarkupId(true);
+        container.setOutputMarkupPlaceholderTag(true);
+        return container;
     }
 
     private WebMarkupContainer createAjaxRadioGroup() {
@@ -71,6 +95,7 @@ public class HomePage extends WebPage {
                         getState().setAjaxRadioSelect(it.getModelObject());
 
                         target.add(ajaxRadioDiv);
+                        target.add(checkboxes);
                     }
                 });
             }
@@ -79,10 +104,6 @@ public class HomePage extends WebPage {
         ajaxRadioDiv.add(radioGroup);
         ajaxRadioDiv.setOutputMarkupId(true);
         return ajaxRadioDiv;
-    }
-
-    private String getSelected() {
-        return getState().getAjaxRadioSelect();
     }
 
     private State getState() {
