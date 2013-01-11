@@ -14,6 +14,7 @@ public class EndPage extends WebPage {
         getState().setLastPage(this.getClass());
 
         add(new Label("ajaxRadioSelect"));
+        add(new Label("alternatives"));
         add(new Label("lastPage"));
     }
 

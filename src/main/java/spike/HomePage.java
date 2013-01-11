@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.markup.html.basic.Label;
@@ -18,14 +19,16 @@ import org.apache.wicket.markup.html.WebPage;
 import java.util.Arrays;
 import java.util.List;
 
+import static java.util.Arrays.asList;
+
 public class HomePage extends WebPage {
 
-    private static final List<String> AJAX_RADIO_TYPES = Arrays.asList("ON", "OFF");
-    private static final List<String> CHECKBOXES = Arrays.asList("Alt 1", "Alt 2", "Alt 3");
+    private static final List<String> AJAX_RADIO_TYPES = asList("ON", "OFF");
+    private static final List<String> CHECKBOXES = asList("Alt 1", "Alt 2", "Alt 3");
     private Component checkboxes;
 
     public HomePage() {
-        super(Model.of(new State("OFF")));
+        super(Model.of(new State("OFF", asList("Alt 1"))));
         getState().setLastPage(this.getClass());
 
         add(createForm());
@@ -44,6 +47,7 @@ public class HomePage extends WebPage {
             protected void onSubmit() {
                 System.out.println("HomePage.onSubmit");
                 System.out.println("getState() = " + getState());
+
                 modelChanging();
                 EndPage nextPage = new EndPage(getState());
                 modelChanged();
@@ -68,8 +72,30 @@ public class HomePage extends WebPage {
         ListView<String> listView = new ListView<String>("checkboxListView", CHECKBOXES) {
             @Override
             protected void populateItem(ListItem<String> item) {
-                String string = item.getModelObject();
-                item.add(new CheckBox("check", Model.of(true)));
+                final String string = item.getModelObject();
+                CheckBox checkBox = new CheckBox("check", new IModel<Boolean>() {
+                    @Override
+                    public Boolean getObject() {
+                        List<String> alternatives = getState().getAlternatives();
+                        return alternatives.contains(string);
+                    }
+
+                    @Override
+                    public void setObject(Boolean object) {
+                        if (object == true) {
+                            getState().getAlternatives().add(string);
+                        } else {
+                            getState().getAlternatives().remove(string);
+                        }
+
+                    }
+
+                    @Override
+                    public void detach() {
+                    }
+                });
+                checkBox.setOutputMarkupId(true);
+                item.add(checkBox);
                 item.add(new Label("name", string));
             }
         };

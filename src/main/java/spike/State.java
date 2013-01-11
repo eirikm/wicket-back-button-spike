@@ -1,6 +1,8 @@
 package spike;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Eirik Meland <eirik.meland@conduct.no>
@@ -8,10 +10,12 @@ import java.io.Serializable;
 public class State implements Serializable {
 
     private String ajaxRadioSelect;
+    private List<String> alternatives = new ArrayList<String>();
     private Class lastPage;
 
-    public State(String ajaxRadioSelect) {
+    public State(String ajaxRadioSelect, List<String> alternatives) {
         this.ajaxRadioSelect = ajaxRadioSelect;
+        this.alternatives.addAll(alternatives);
     }
 
     public String getAjaxRadioSelect() {
@@ -30,10 +34,19 @@ public class State implements Serializable {
         this.lastPage = lastPage;
     }
 
+    public List<String> getAlternatives() {
+        return alternatives;
+    }
+
+    public void setAlternatives(List<String> alternatives) {
+        this.alternatives = alternatives;
+    }
+
     @Override
     public String toString() {
         return "State{" +
                 "ajaxRadioSelect='" + ajaxRadioSelect + '\'' +
+                ", alternatives=" + alternatives +
                 ", lastPage=" + lastPage +
                 '}';
     }
